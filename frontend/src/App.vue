@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <router-view />
+    <suspense>
+      <router-view />
+    </suspense>
   </v-app>
 </template>
 
-<script lang="ts" setup>
-  //
-</script>
+<script lang="ts" setup></script>

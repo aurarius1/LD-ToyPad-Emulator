@@ -13,12 +13,16 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     copy: typeof import('./components/ToyPad.old copy.vue')['default']
-    DeleteToy: typeof import('./components/DeleteToy.vue')['default']
+    CreateToyDialog: typeof import('./components/CreateToyDialog.vue')['default']
+    DeleteToy: typeof import('./components/DeleteToyTag.vue')['default']
+    DeleteToyTag: typeof import('./components/DeleteToyTag.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ToyBox: typeof import('./components/ToyBox.vue')['default']
     ToyPad: typeof import('./components/ToyPad.vue')['default']
     'ToyPad.old': typeof import('./components/ToyPad.old.vue')['default']
+    ToyPadItem: typeof import('./components/ToyPadItem.vue')['default']
     ToyTag: typeof import('./components/ToyTag.vue')['default']
   }
 }

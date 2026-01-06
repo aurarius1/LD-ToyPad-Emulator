@@ -80,6 +80,28 @@ export default defineConfig({
     extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.vue']
   },
   server: {
-    port: 3000
+    port: 3000,
+    proxy: {
+      '/socket.io': {
+        target: 'http://192.168.10.6:8080',
+        ws: true
+      },
+      '/json': {
+        target: 'http://192.168.10.6:8080',
+        changeOrigin: true
+      },
+      '/images': {
+        target: 'http://192.168.10.6:8080',
+        changeOrigin: true
+      },
+      '/character': {
+        target: 'http://192.168.10.6:8080',
+        changeOrigin: true
+      },
+      '/vehicle': {
+        target: 'http://192.168.10.6:8080',
+        changeOrigin: true
+      }
+    }
   }
 })

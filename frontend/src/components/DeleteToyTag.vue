@@ -1,24 +1,35 @@
 <template>
-  <div class="wrapper">
+  <v-sheet
+    color="red-lighten-1"
+    max-width="10rem"
+    rounded="xl"
+    style="aspect-ratio: 1"
+    width="120px"
+  >
     <Draggable
       v-model="list"
       class="delete-pad"
+      :delay="100"
       group="toytag"
       item-key="id"
       :sort="false"
       @change="onPadDrop"
-      :delay="100"
     >
-      <template #header>delete</template>
+      <template #header>
+        <v-icon icon="mdi-trash-can" />
+      </template>
       <template #item="{ element }">deleting {{ element.id }}</template>
     </Draggable>
-  </div>
+  </v-sheet>
 </template>
 
 <script setup lang="ts">
-  import { useAppStore } from '@/stores/app'
-  import { ToyTag } from '@/types/tag'
+  import type { ToyTag } from '@/types/tag'
   import Draggable from 'vuedraggable'
+  import { useSocket } from '@/composables/useSocket'
+  import { useAppStore } from '@/stores/app'
+
+  const { deleteToken } = useSocket()
 
   const appStore = useAppStore()
   const { toyTags } = storeToRefs(appStore)
@@ -26,21 +37,16 @@
   const list = ref<ToyTag[]>([])
   const onPadDrop = (event: any) => {
     if ('added' in event) {
-      const toDelete = event['added'].element
+      const toDelete = event['added'].element as ToyTag
       toyTags.value = toyTags.value.filter((x: ToyTag) => x.id !== toDelete.id)
+      deleteToken(toDelete.uid)
       list.value = []
     }
   }
 </script>
 
-<style scoped>
-  .wrapper {
-    width: 140px;
-    max-width: 10rem; /* optional */
-    aspect-ratio: 1 / 1; /* 🔑 makes it square */
-  }
+<style scoped lang="scss">
   .delete-pad {
-    background: green;
     display: flex;
     justify-content: center;
     align-content: center;
