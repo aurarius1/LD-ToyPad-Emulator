@@ -188,7 +188,7 @@ function initializeToyTagsJSON() {
   const data = fs.readFileSync(toytagsPath, "utf8");
   const dataset = JSON.parse(data);
   dataset.forEach((db) => {
-    db.index = "-1";
+    db.index = -1;
   });
   fs.writeFileSync(toytagsPath, JSON.stringify(dataset, null, 4));
   console.log("Initialized toytags.JSON");
