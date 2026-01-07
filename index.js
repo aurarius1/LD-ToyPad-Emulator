@@ -487,9 +487,9 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "server")));
 
 //**Website requests**//
-app.get("/", (req, res) => {
+/*app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "server/index.html"));
-});
+});*/
 
 //Create a new Character and save that data to toytags.json
 // TODO INTRODUCE A ROUTE WHERE WE CAN BATCH PROCESS CREATION REQUESTS
@@ -682,6 +682,10 @@ io.on("connection", (socket) => {
     io.emit("refreshTokens");
     console.log("<<Tags are synced!>>");
   });
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "server", "index.html"));
 });
 
 const EXPRESS_PORT = 80;

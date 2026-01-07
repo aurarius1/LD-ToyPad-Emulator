@@ -15,20 +15,28 @@
       </template>
       <v-container class="pt-0">
         <v-row dense>
-          <v-col cols="6">{{ t('toybox.filter.name') }}</v-col>
-          <v-col cols="6">
+          <v-col
+            class="d-flex align-center"
+            cols="4"
+          >
+            {{ t('toybox.filter.name') }}
+          </v-col>
+          <v-col cols="8">
             <v-text-field
               v-model="nameFilter"
               clearable
               density="compact"
               hide-details
               variant="outlined"
-            >
-              <template #append-inner="slotProps"></template>
-            </v-text-field>
+            />
           </v-col>
-          <v-col cols="6">{{ t('toybox.filter.world') }}</v-col>
-          <v-col cols="6">
+          <v-col
+            class="d-flex align-center"
+            cols="4"
+          >
+            {{ t('toybox.filter.world') }}
+          </v-col>
+          <v-col cols="8">
             <v-autocomplete
               v-model="worldFilter"
               clearable
@@ -37,10 +45,32 @@
               :items="worlds"
               multiple
               variant="outlined"
-            />
+            >
+              <template #selection="{ item, index }">
+                <v-chip
+                  v-if="index < 2"
+                  color="primary"
+                  :text="item.title"
+                />
+
+                <span
+                  v-if="index === 2"
+                  class="text-grey text-caption align-self-center"
+                >
+                  ({{
+                    t('toybox.filter.world_overflow', {
+                      others: worldFilter.length - 2
+                    })
+                  }})
+                </span>
+              </template>
+            </v-autocomplete>
           </v-col>
-          <v-col cols="6">{{ t('toybox.filter.abilities') }}</v-col>
-          <v-col cols="6">
+          <v-col cols="4">{{ t('toybox.filter.abilities') }}</v-col>
+          <v-col
+            class="d-flex align-center"
+            cols="8"
+          >
             <v-autocomplete
               v-model="abilitiesFilter"
               clearable
@@ -49,7 +79,26 @@
               :items="abilities"
               multiple
               variant="outlined"
-            />
+            >
+              <template #selection="{ item, index }">
+                <v-chip
+                  v-if="index < 2"
+                  color="primary"
+                  :text="item.title"
+                />
+
+                <span
+                  v-if="index === 2"
+                  class="text-grey text-caption align-self-center"
+                >
+                  ({{
+                    t('toybox.filter.abilities_overflow', {
+                      others: abilitiesFilter.length - 2
+                    })
+                  }})
+                </span>
+              </template>
+            </v-autocomplete>
           </v-col>
           <v-col cols="12">
             <v-btn
@@ -71,7 +120,27 @@
       cols="7"
       lg="8"
     >
-      <v-sheet rounded="xl">
+      <v-card rounded="xl">
+        <v-overlay
+          v-model="refreshingToyTags"
+          class="justify-center align-center"
+          contained
+          no-click-animation
+          persistent
+        >
+          <v-card>
+            <v-container class="d-flex flex-column justify-center align-center">
+              <v-progress-circular
+                indeterminate
+                size="90"
+                width="8"
+              />
+              <span class="text-high-emphasis text-h6 mt-2">
+                {{ t('toy_tags_refresh.loader') }}
+              </span>
+            </v-container>
+          </v-card>
+        </v-overlay>
         <draggable
           class="toybox-grid"
           :delay="100"
@@ -79,9 +148,8 @@
           group="toytag"
           item-key="id"
           :list="toDisplay"
-          @change="console.log"
+          @change="handleChange"
         >
-          <!-- TODO HOVER ANIMATION -->
           <template #item="{ element }">
             <toy-tag
               height="6em"
@@ -89,7 +157,7 @@
             />
           </template>
         </draggable>
-      </v-sheet>
+      </v-card>
     </v-col>
     <v-col
       class="d-flex flex-column align-center"
@@ -104,12 +172,25 @@
         :text="t('toybox.create_toy')"
         @click="createDialog = true"
       />
-      <v-btn
-        class="mt-2"
-        prepend-icon="mdi-filter-variant"
-        :text="t('toybox.filter.show')"
-        @click="showFilter = true"
-      />
+
+      <div class="mt-2">
+        <v-btn
+          :color="anyFilterSet ? 'primary' : undefined"
+          prepend-icon="mdi-filter-variant"
+          :text="t('toybox.filter.show')"
+          @click="showFilter = true"
+        />
+        <v-fade-transition>
+          <v-icon-btn
+            v-if="anyFilterSet"
+            class="ms-2"
+            icon="mdi-delete-empty"
+            size="small"
+            variant="plain"
+            @click="clearFilter"
+          />
+        </v-fade-transition>
+      </div>
     </v-col>
   </v-row>
 </template>
@@ -119,11 +200,15 @@
   import { useI18n } from 'vue-i18n'
   import Draggable from 'vuedraggable'
   import { useDisplay } from 'vuetify'
+  import useAxios from '@/composables/useAxios'
+  import useSocket from '@/composables/useSocket'
   import { useAppStore } from '@/stores/app'
 
   const { t } = useI18n()
   const { mdAndUp } = useDisplay()
   const appStore = useAppStore()
+  const { refreshingToyTags } = useSocket()
+  const { toyTagEndpoint } = useAxios()
 
   const createDialog = defineModel<boolean>('createDialog', {
     required: true
@@ -137,21 +222,37 @@
   const showFilter = ref<boolean>(false)
   const nameFilter = ref<string>()
   const abilitiesFilter = ref<string[]>([])
-  const worldFilter = ref<string[]>()
+  const worldFilter = ref<string[]>([])
 
   const height = computed(() => (mdAndUp ? '700px' : '100%'))
   const width = computed(() => (mdAndUp ? '600px' : '100%'))
 
   // APPLY ABILITIES AND WORLD FILTER
   const toDisplay = computed(() => {
-    if (nameFilter.value) {
-      return unusedToyTags.value.filter((x: ToyTag) =>
-        x.name
-          .toLocaleLowerCase()
-          .includes(nameFilter.value!.toLocaleLowerCase())
-      )
+    if (!anyFilterSet.value) {
+      return unusedToyTags.value
     }
-    return unusedToyTags.value
+
+    return unusedToyTags.value.filter((tag: ToyTag) => {
+      // Name filter
+      let result = true
+      if (nameFilter.value) {
+        result &&= tag.name
+          .toLowerCase()
+          .includes(nameFilter.value.toLowerCase())
+      }
+
+      // Abilities filter
+      if ((abilitiesFilter.value?.length ?? 0) > 0) {
+        result &&= appStore.hasAnyAbility(tag.id, abilitiesFilter.value)
+      }
+
+      if ((worldFilter.value?.length ?? 0) > 0) {
+        result &&= appStore.belongsToAnyWorld(tag.id, worldFilter.value)
+      }
+
+      return result
+    })
   })
 
   const anyFilterSet = computed(() => {
@@ -161,6 +262,18 @@
       (abilitiesFilter.value?.length ?? 0) > 0
     )
   })
+
+  const handleChange = async (event: any) => {
+    if ('added' in event) {
+      const element = event['added'].element
+      const oldIndex = element.index
+      element.index = -1
+      const removed = await toyTagEndpoint.removeToyTag(element.uid, oldIndex)
+      if (!removed) {
+        element.index = oldIndex
+      }
+    }
+  }
 
   const clearFilter = () => {
     nameFilter.value = undefined

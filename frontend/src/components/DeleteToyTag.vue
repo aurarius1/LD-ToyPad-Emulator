@@ -26,7 +26,7 @@
 <script setup lang="ts">
   import type { ToyTag } from '@/types/tag'
   import Draggable from 'vuedraggable'
-  import { useSocket } from '@/composables/useSocket'
+  import useSocket from '@/composables/useSocket'
   import { useAppStore } from '@/stores/app'
 
   const { deleteToken } = useSocket()

@@ -1,13 +1,15 @@
 <template>
   <Draggable
-    v-model="list"
     class="pad"
+    :delay="100"
+    delay-on-touch-only
+    :disabled="!connected"
     group="toytag"
     item-key="id"
+    :model-value="tag"
     :sort="false"
     :style="`height: ${height}; aspect-ratio: 1;`"
     @change="onPadDrop"
-    :delay="100"
   >
     <template #item="{ element }">
       <toy-tag :tag="element" />
@@ -18,45 +20,77 @@
 <script setup lang="ts">
   import type { ToyTag } from '@/types/tag'
   import Draggable from 'vuedraggable'
-  import { useAppStore } from '@/stores/app'
+  import useAxios from '@/composables/useAxios'
+  import useSocket from '@/composables/useSocket'
 
-  const appStore = useAppStore()
-  const { toyTags } = storeToRefs(appStore)
+  const { toyTagEndpoint } = useAxios()
+  const { connected } = useSocket()
 
-  // TODO MODEL FUNCTIONALITY TO RESTORE WHEN SYNCING
+  const tag = defineModel<ToyTag[]>('tag', {
+    required: true,
+    default: []
+  })
 
-  const { height = '100%', index } = defineProps<{
+  const {
+    height = '100%',
+    index,
+    position
+  } = defineProps<{
     height?: string
     width?: string
     index: number
+    position: number
   }>()
 
-  const list = ref<ToyTag[]>(
-    toyTags.value.filter((x: ToyTag) => x.index === index)
-  )
-
-  const handleAdd = (element: ToyTag, newIndex: number) => {
-    if (list.value.length > 1) {
-      const removed = list.value[newIndex === 1 ? 0 : 1]!
-      const indexOfRemoved = toyTags.value.findIndex(
-        (x: ToyTag) => x.id === removed.id
-      )
-      toyTags.value[indexOfRemoved].index = -1
+  // TODO FUNCTIONALITY TO SWITCH ELEMENTS BETWEEN PADS
+  const handleAdd = async (element: ToyTag) => {
+    console.log('try adding tag', element, 'to pad', index)
+    const oldIndex = element.index
+    element.index = index
+    let anyNotRemoved = false
+    for (const x of tag.value ?? []) {
+      if (x.index == -1) {
+        continue
+      }
+      console.log(x)
+      const removed = await toyTagEndpoint.removeToyTag(x.uid, x.index)
+      if (removed) {
+        x.index = -1
+      }
+      anyNotRemoved ||= !removed
     }
-    const indexOfDropped = toyTags.value.findIndex(
-      (x: ToyTag) => x.id === element.id
-    )
-    toyTags.value[indexOfDropped].index = index
-    list.value = [list.value[newIndex]!]
+
+    if (anyNotRemoved) {
+      element.index = oldIndex
+      // TODO ERROR?
+      console.error(
+        'there was a tag on the new index',
+        index,
+        'that could not be removed'
+      )
+      return
+    }
+    console.log(element.index, oldIndex)
+    // TODO BACKEND RETURNS CURR INDEX AS STRING
+    if (oldIndex != -1) {
+      const removed = await toyTagEndpoint.removeToyTag(element.uid, oldIndex)
+      if (!removed) {
+        element.index = oldIndex
+        return
+      }
+    }
+
+    const placed = await toyTagEndpoint.placeToyTag(element, index, position)
+    if (!placed) {
+      element.index = -1
+      console.error('couldnt move toytag', index, 'leaving at old index', -1)
+    }
   }
 
   const onPadDrop = (event: any) => {
     if ('added' in event) {
-      handleAdd(event['added'].element, event['added'].newIndex)
+      handleAdd(event['added'].element)
       return
-    }
-    if ('removed' in event) {
-      event['removed'].element.index = -1
     }
   }
 </script>

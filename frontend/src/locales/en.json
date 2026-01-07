@@ -1,5 +1,15 @@
 {
   "title": "Toy Pad Emulator for Lego Dimensions",
+  "game_not_connected": "No connection to the game. This message will disappear once a connection to the game is established",
+  "settings": {
+    "languages": {
+      "en": "English"
+    }
+  },
+  "toy_tags_refresh": {
+    "title": "Tags refreshed successfully",
+    "loader": "Please wait ... refreshing tags may take a moment"
+  },
   "create_toy_dialog": {
     "title": "Create a toy",
     "create_character": "Select characters to create",
@@ -18,7 +28,9 @@
       "title": "Filter by...",
       "name": "Name",
       "world": "World",
-      "abilities": "Abilities"
+      "world_overflow": "@:create_toy_dialog.others",
+      "abilities": "Abilities",
+      "abilities_overflow": "@:create_toy_dialog.others"
     }
   },
   "sync_info": {

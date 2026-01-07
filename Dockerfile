@@ -1,6 +1,13 @@
 ARG TARGETARCH
 ARG TARGETVARIANT
 
+FROM node:alpine AS frontend
+WORKDIR /frontend
+COPY ./frontend/package*.json ./
+RUN npm install
+COPY ./frontend . 
+RUN npm run build
+
 FROM --platform=linux/amd64 node:22-alpine AS base-amd64
 
 # arm 64-bit
@@ -36,8 +43,9 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Copy all source
+COPY --from=frontend /frontend/dist ./server
 COPY server ./server
+
 COPY index.js ./index.js
 
 VOLUME ["/app/server/json"]

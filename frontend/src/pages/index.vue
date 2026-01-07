@@ -1,6 +1,6 @@
 <template>
   <create-toy-dialog v-model:active="createDialog" />
-  <v-container class="fluid">
+  <v-container>
     <v-row>
       <v-col
         class="text-center text-high-emphasis text-h6"
@@ -27,7 +27,6 @@
         cols="12"
         lg="10"
       >
-        <!-- TODO IF NOT CONNECTED MESSAGE HERE-->
         <toy-pad />
       </v-col>
       <v-col
@@ -67,7 +66,7 @@
   import { useI18n } from 'vue-i18n'
 
   import useAxios from '@/composables/useAxios'
-  import { useSocket } from '@/composables/useSocket'
+  import useSocket from '@/composables/useSocket'
   import { useAppStore } from '@/stores/app'
 
   const { characterEndpoint, vehicleEndpoint, toyTagEndpoint } = useAxios()

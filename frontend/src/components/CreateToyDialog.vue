@@ -248,7 +248,6 @@
     () => selectedCharacters.value.length > 0
   )
 
-  // TODO USE VALID VEHICLES & CHARACTERS FROM APPSTORE
   const characterToSelect = computed(() => {
     return validCharacters.value.filter(
       (character: Character) =>
