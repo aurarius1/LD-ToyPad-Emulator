@@ -108,33 +108,35 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    // TODO BETTER DEV SETUP? I don't really know how to run backend without the USB gadget
+    // I did it by running the backend on the pi and then just using the ip of the pi for the proxy
     proxy: {
       '/socket.io': {
-        target: 'http://192.168.10.6:8080',
+        target: 'http://localhost:80',
         ws: true
       },
       '/json': {
-        target: 'http://192.168.10.6:8080',
+        target: 'http://localhost:80',
         changeOrigin: true
       },
       '/images': {
-        target: 'http://192.168.10.6:8080',
+        target: 'http://localhost:80',
         changeOrigin: true
       },
       '/character': {
-        target: 'http://192.168.10.6:8080',
+        target: 'http://localhost:80',
         changeOrigin: true
       },
       '/vehicle': {
-        target: 'http://192.168.10.6:8080',
+        target: 'http://localhost:80',
         changeOrigin: true
       },
       '/place': {
-        target: 'http://192.168.10.6:8080',
+        target: 'http://localhost:80',
         changeOrigin: true
       },
       '/remove': {
-        target: 'http://192.168.10.6:8080',
+        target: 'http://localhost:80',
         changeOrigin: true
       }
     }
