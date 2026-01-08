@@ -1,7 +1,7 @@
 ARG TARGETARCH
 ARG TARGETVARIANT
 
-FROM node:alpine AS frontend
+FROM --platform=linux/amd64 node:alpine AS frontend
 WORKDIR /frontend
 COPY ./frontend/package*.json ./
 RUN npm install
@@ -22,7 +22,7 @@ FROM --platform=linux/arm/v7 node:18-alpine AS base-armv8
 FROM --platform=linux/arm/v7 node:18-alpine AS base-armv7
 FROM --platform=linux/arm/v6 node:18-alpine AS base-armv6
 
-FROM base-${TARGETARCH}${TARGETVARIANT} AS final
+FROM base-${TARGETARCH}${TARGETVARIANT} AS builder
 
 ENV CXXFLAGS="-std=c++17"
 # Install native build tools
@@ -42,6 +42,10 @@ WORKDIR /app
 # Copy package and install deps
 COPY package*.json ./
 RUN npm install
+
+FROM base-${TARGETARCH}${TARGETVARIANT} AS final
+COPY --from=builder /app /app
+WORKDIR /app
 
 COPY --from=frontend /frontend/dist ./server
 COPY server ./server
