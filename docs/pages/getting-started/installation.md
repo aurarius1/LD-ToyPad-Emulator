@@ -1,6 +1,8 @@
 # Installation
 
-## AMD64 / Virtual Machine
+The preferred way is to use the container which can be obtained from the repositories container registry. This page will focus on preparation of the systems (either [sbc](#sbc) or [vm](#vm)) and then make use of those containers. You can also locally build the server and frontend, but this is not recommended. Instructions can be found under [building yourself](/advanced/building-yourself)
+
+## VM
 
 ## SBC
 

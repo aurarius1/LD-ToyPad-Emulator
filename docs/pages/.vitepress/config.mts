@@ -53,6 +53,15 @@ export default defineConfig({
         ],
       },
       {
+        text: "Advanced",
+        items: [
+          {
+            text: "Build yourself",
+            link: "/advanced/building-yourself",
+          },
+        ],
+      },
+      {
         text: "Development",
         items: [
           {
