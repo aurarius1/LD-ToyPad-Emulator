@@ -14,12 +14,12 @@
       variant="solo-filled"
     >
       <template #selection="{ item }">
-        <span>{{ t(`settings.languages.${item.raw}`) }}</span>
+        <span>{{ t(`settings.languages.${item}`) }}</span>
       </template>
       <template #item="{ item, props }">
         <v-list-item
           v-bind="props"
-          :title="t(`settings.languages.${item.raw}`)"
+          :title="t(`settings.languages.${item}`)"
         />
       </template>
     </v-select>
@@ -64,8 +64,9 @@
   import { useTheme } from 'vuetify'
   import { locales } from '@/plugins/i18n'
   import { useSettingsStore } from '@/stores/settings'
-  const theme = useTheme()
+  import i18n from '@/plugins/i18n'
 
+  const theme = useTheme()
   const settingsStore = useSettingsStore()
   const { t } = useI18n()
   const { theme: selectedTheme, language } = storeToRefs(settingsStore)
@@ -94,6 +95,13 @@
     selectedTheme.value = themes.value[index]!
     console.log(selectedTheme.value)
   }
+
+  watch(language, (newLang: string) => {
+    if (newLang) {
+      // @ts-ignore - i18n global locale property
+      i18n.global.locale.value = newLang
+    }
+  })
 </script>
 
 <style scoped lang="sass">
@@ -101,7 +109,6 @@
     color: rgba(var(--v-theme-on-background), var(--v-disabled-opacity))
     text-decoration: none
     transition: .2s ease-in-out
-
     &:hover
       color: rgba(25, 118, 210, 1)
 </style>

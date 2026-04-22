@@ -4,10 +4,9 @@ import Vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Fonts from 'unplugin-fonts/vite'
 import Components from 'unplugin-vue-components/vite'
-import { VueRouterAutoImports } from 'unplugin-vue-router'
-import VueRouter from 'unplugin-vue-router/vite'
+import { VueRouterAutoImports } from 'vue-router/unplugin'
+import VueRouter from 'vue-router/vite'
 import { defineConfig, loadEnv } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
 import Layouts from 'vite-plugin-vue-layouts-next'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
@@ -27,39 +26,6 @@ export default defineConfig(({ mode }) => {
       }
     },
     plugins: [
-      VitePWA({
-        registerType: 'autoUpdate',
-        includeAssets: [
-          'favicon.ico',
-          'apple-touch-icon.png',
-          'masked-icon.svg'
-        ],
-        manifest: {
-          name: 'LD Toypad Emulator',
-          short_name: 'LD Toypad',
-          description:
-            'A tutorial on building a resilient PWA with Vue and Vite',
-          theme_color: '#49494b',
-          icons: [
-            {
-              // 2. Updated to match your actual filenames
-              src: 'manifest-icon-192.maskable.png',
-              sizes: '192x192',
-              type: 'image/png',
-              purpose: 'any maskable'
-            },
-            {
-              src: 'manifest-icon-512.maskable.png',
-              sizes: '512x512',
-              type: 'image/png',
-              purpose: 'any maskable'
-            }
-          ]
-        },
-        devOptions: {
-          enabled: true // Required to test PWA features on localhost
-        }
-      }),
       VueRouter({
         dts: 'src/typed-router.d.ts'
       }),
