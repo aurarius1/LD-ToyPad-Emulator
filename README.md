@@ -131,10 +131,7 @@ Allows you to connect an emulated Toy Pad to your PC or video-game console.
 
 #### Installation
 
-1. Flash a Raspberry Pi OS Lite (preferrably 64-bit) on your SD Card.
-   - Raspberry Pi Zero: since Docker stopped supporting the Pi Zero the latest version you should use is Bookworm. Using podman will work (tested with Trixie), though we cannot provide any support for issues with the operating system.
-
-   - This guide uses podman, but you can also use docker, you just need to make sure that you have it installed.
+1. Flash Raspberry Pi OS Bullseye (Lite, either 32-bit for the Zero (W) or 64-bit for RPi 4/5) on a Micro-SD card.
 
 2. Connect your device to your PC via USB cable (don't use the port on the edge of the Pi Zero!).
 
@@ -152,11 +149,14 @@ Allows you to connect an emulated Toy Pad to your PC or video-game console.
 
 5. Reconnect to SSH, change the directory to LD-Toypad-Emulator and build the container using this command:
 
-   ```bash
-   podman pull ghcr.io/berny23/ld-toypad-emulator:latest
-   ```
+```bash
+podman pull \
+  ghcr.io/berny23/ld-toypad-emulator:latest\
+  --platform=linux/your-platform \
+  .
+```
 
-   If this command fails please see [Cannot pull image](#cannot-pull-image).
+NOTE: check the [Package Registry](https://github.com/Berny23/LD-ToyPad-Emulator/pkgs/container/ld-toypad-emulator) to find out what platform names are supported.
 
 6. Once the container is successfully build run start the container:
 
