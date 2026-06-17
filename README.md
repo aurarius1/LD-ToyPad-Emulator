@@ -131,7 +131,7 @@ Allows you to connect an emulated Toy Pad to your PC or video-game console.
 
 #### Installation
 
-1. Flash Raspberry Pi OS Bullseye (Lite, either 32-bit for the Zero (W) or 64-bit for RPi 4/5) on a Micro-SD card.
+1. Flash Raspberry Pi OS Bullseye (Lite, either [32-bit](https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-05-03/2023-05-03-raspios-bullseye-armhf-lite.img.xz) for the Zero (W) or [64-bit](https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2023-05-03/2023-05-03-raspios-bullseye-arm64-lite.img.xz) for RPi 4/5) on a Micro-SD card. Newer Debian versions than Bullseye are currently not working.
 
 2. Connect your device to your PC via USB cable (don't use the port on the edge of the Pi Zero!).
 
