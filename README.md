@@ -156,7 +156,7 @@ podman pull \
   .
 ```
 
-NOTE: check the [Package Registry](https://github.com/Berny23/LD-ToyPad-Emulator/pkgs/container/ld-toypad-emulator) to find out what platform names are supported.
+NOTE: Run `uname -a` to see your own processor architecture, like e. g. *arm64*. Check the [Package Registry](https://github.com/Berny23/LD-ToyPad-Emulator/pkgs/container/ld-toypad-emulator) (in the tab *OS/Arch*) to find out what platform names are supported.
 
 6. Once the container is successfully build run start the container:
 
