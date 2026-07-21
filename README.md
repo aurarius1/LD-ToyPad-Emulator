@@ -131,7 +131,7 @@ Allows you to connect an emulated Toy Pad to your PC or video-game console.
 
 #### Installation
 
-1. Flash Raspberry Pi OS Bullseye (Lite, either 32-bit for the Zero (W) or 64-bit for RPi 4/5) on a Micro-SD card.
+1. Flash Raspberry Pi OS Bullseye (Lite, either [32-bit](https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-05-03/2023-05-03-raspios-bullseye-armhf-lite.img.xz) for the Zero (W) or [64-bit](https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2023-05-03/2023-05-03-raspios-bullseye-arm64-lite.img.xz) for RPi 4/5) on a Micro-SD card. Newer Debian versions than Bullseye are currently not working.
 
 2. Connect your device to your PC via USB cable (don't use the port on the edge of the Pi Zero!).
 
@@ -156,7 +156,7 @@ podman pull \
   .
 ```
 
-NOTE: check the [Package Registry](https://github.com/Berny23/LD-ToyPad-Emulator/pkgs/container/ld-toypad-emulator) to find out what platform names are supported.
+NOTE: Run `uname -a` to see your own processor architecture, like e. g. *arm64*. Check the [Package Registry](https://github.com/Berny23/LD-ToyPad-Emulator/pkgs/container/ld-toypad-emulator) (in the tab *OS/Arch*) to find out what platform names are supported.
 
 6. Once the container is successfully build run start the container:
 
