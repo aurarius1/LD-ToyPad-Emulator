@@ -50,7 +50,7 @@
                 <v-chip
                   v-if="index < 2"
                   color="primary"
-                  :text="item.title"
+                  :text="item"
                 />
 
                 <span
@@ -84,7 +84,7 @@
                 <v-chip
                   v-if="index < 2"
                   color="primary"
-                  :text="item.title"
+                  :text="item"
                 />
 
                 <span

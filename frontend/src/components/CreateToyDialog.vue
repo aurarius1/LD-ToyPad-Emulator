@@ -67,7 +67,7 @@
             <v-chip
               v-if="index < 3"
               color="primary"
-              :text="item.title"
+              :text="item.name"
             />
 
             <span
@@ -147,7 +147,7 @@
             <v-chip
               v-if="index < 3"
               color="primary"
-              :text="item.title"
+              :text="item.name"
             />
 
             <span
@@ -217,9 +217,8 @@
   import { useI18n } from 'vue-i18n'
   import { useDisplay } from 'vuetify'
   import useAxios from '@/composables/useAxios'
-  import { useAppStore } from '@/stores/app'
-
   import { useRouter } from 'vue-router'
+  import { useAppStore } from '@/stores/app'
 
   const { mdAndUp } = useDisplay()
   const { t } = useI18n()
