@@ -1,5 +1,5 @@
-import type { AxiosInstance } from 'axios'
 import type { Character } from '@/types/character'
+import type { AxiosInstance } from 'axios'
 
 export default (api: AxiosInstance) => {
   const getAllCharacters = async (): Promise<Character[]> => {
@@ -26,9 +26,15 @@ export default (api: AxiosInstance) => {
     for (let i = 0; i < characters!.length; i++) {
       console.log('creating', characters[i])
       const created = await createCharacter(characters[i]!.id)
-      if (created) {
-        success++
+
+      if (!created) {
+        console.error(
+          `Failed to create character with ID: ${characters[i]!.id}`
+        )
+        return -1
       }
+
+      success++
     }
     return success
   }

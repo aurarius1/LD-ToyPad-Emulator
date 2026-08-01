@@ -85,14 +85,12 @@
             <v-list-item
               v-bind="props"
               active-class="text-primary"
-              :subtitle="
-                t('create_toy_dialog.world', { world: item.raw.world })
-              "
+              :subtitle="t('create_toy_dialog.world', { world: item.world })"
             >
               <template #prepend>
                 <!-- TODO THIS WOULD BE NICER IF WE WOULD HAVE A DEDICATED FALLBACK IMAGE -->
                 <v-avatar>
-                  <v-img :src="`/images/${item.raw.id}.png`">
+                  <v-img :src="`/images/${item.id}.png`">
                     <template #error>
                       <v-icon
                         icon="mdi-account"
@@ -167,14 +165,12 @@
             <v-list-item
               v-bind="props"
               active-class="text-primary"
-              :subtitle="
-                t('create_toy_dialog.world', { world: item.raw.world })
-              "
+              :subtitle="t('create_toy_dialog.world', { world: item.world })"
             >
               <template #prepend>
                 <!-- TODO THIS WOULD BE NICER IF WE WOULD HAVE A DEDICATED FALLBACK IMAGE -->
                 <v-avatar>
-                  <v-img :src="`/images/${item.raw.id}.png`">
+                  <v-img :src="`/images/${item.id}.png`">
                     <template #error>
                       <v-icon
                         icon="mdi-account"
@@ -223,10 +219,13 @@
   import useAxios from '@/composables/useAxios'
   import { useAppStore } from '@/stores/app'
 
+  import { useRouter } from 'vue-router'
+
   const { mdAndUp } = useDisplay()
   const { t } = useI18n()
   const appStore = useAppStore()
   const { characterEndpoint, vehicleEndpoint, toyTagEndpoint } = useAxios()
+  const router = useRouter()
 
   const active = defineModel<boolean>('active', {
     required: true
@@ -292,9 +291,32 @@
     numCharactersCreated.value = await characterEndpoint.createCharacters(
       selectedCharacters.value
     )
+
+    if (numCharactersCreated.value < 0) {
+      creating.value = false
+      active.value = false
+
+      router.push({
+        path: 'error',
+        query: { message: t('create_toy_dialog.error') }
+      })
+      return
+    }
+
     numVehiclesCreated.value = await vehicleEndpoint.createVehicles(
       selectedVehicles.value
     )
+
+    if (numVehiclesCreated.value < 0) {
+      creating.value = false
+      active.value = false
+
+      router.push({
+        path: 'error',
+        query: { message: t('create_toy_dialog.error') }
+      })
+      return
+    }
 
     toyTags.value = await toyTagEndpoint.getToyTags()
 

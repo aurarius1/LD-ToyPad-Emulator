@@ -80,3 +80,15 @@ podman pull --arch=your-architecture ghcr.io/berny23/ld-toypad-emulator:latest
 ```
 
 Be sure to substitute in your architecture. Raspberry Pi OS 64bit uses the arm64 architecture as platform, Raspberry Pi OS 32bit uses linux/arm/v7 as platform, the Raspberry Pi Zero uses linux/arm/v6 as platform, and x86_64 based machines will use linux/amd64 as platform.
+
+## ToyPad not detected (Container)
+
+There is a chance that the game does not detect the emulated toypad, if the container starts up after the game. The solution is to always make sure the game is started after the container is started.
+
+1. Shut down the game, if it is running.
+2. Shutdown the SBC / host device.
+3. Unplug the SBC / host device.
+4. Start the SBC / host device again.
+5. Start the emulator container and make sure the page is accessible.
+6. Make sure the webpage is reachable.
+7. If you start the game now, it should connect to the toypad properly.

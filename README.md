@@ -156,7 +156,7 @@ podman pull \
   .
 ```
 
-NOTE: Run `uname -a` to see your own processor architecture, like e. g. *arm64*. Check the [Package Registry](https://github.com/Berny23/LD-ToyPad-Emulator/pkgs/container/ld-toypad-emulator) (in the tab *OS/Arch*) to find out what platform names are supported.
+NOTE: Run `uname -a` to see your own processor architecture, like e. g. _arm64_. Check the [Package Registry](https://github.com/Berny23/LD-ToyPad-Emulator/pkgs/container/ld-toypad-emulator) (in the tab _OS/Arch_) to find out what platform names are supported.
 
 6. Once the container is successfully build run start the container:
 
@@ -275,7 +275,7 @@ After that, run the command `hostname -I` in your virtual machine (or on your si
 Retry pulling the image using this command:
 
 ```
-podman pull --arch=your-architecture ghcr.io/berny23/ld-toypad-emulator:latest
+podman pull ghcr.io/berny23/ld-toypad-emulator:latest
 ```
 
 Be sure to substitute in your architecture. Raspberry Pi OS 64bit uses the arm64 architecture as platform, Raspberry Pi OS 32bit uses linux/arm/v7 as platform, the Raspberry Pi Zero uses linux/arm/v6 as platform, and x86_64 based machines will use linux/amd64 as platform.

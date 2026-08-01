@@ -25,9 +25,13 @@ export default (api: AxiosInstance) => {
     let success = 0
     for (let i = 0; i < vehicles!.length; i++) {
       const created = await createVehicle(vehicles[i]!.id)
-      if (created) {
-        success++
+
+      if (!created) {
+        console.error(`Failed to create vehicle with ID: ${vehicles[i]!.id}`)
+        return -1
       }
+
+      success++
     }
     return success
   }

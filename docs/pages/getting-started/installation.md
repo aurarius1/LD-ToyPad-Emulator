@@ -8,10 +8,7 @@ The preferred way is to use the container which can be obtained from the reposit
 
 In this guide we will focus on the setup on a Raspberry Pi.
 
-1. Flash a recent version of Raspberry Pi OS Lite (if supported 64-bit) to an SD card.
-   ::: info
-   if you use the Raspberry Pi Zero, Docker stopped supporting this hardware after Bookworm (see [Docker support](https://docs.docker.com/engine/install/raspberry-pi-os/#installation-methods))
-   :::
+1. Flash Raspberry Pi OS Bullseye (Lite, either [32-bit](https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-05-03/2023-05-03-raspios-bullseye-armhf-lite.img.xz) for the Zero (W) or [64-bit](https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2023-05-03/2023-05-03-raspios-bullseye-arm64-lite.img.xz) for RPi 4/5) on a Micro-SD card. Newer Debian versions than Bullseye are currently not working.
 
 2. Connect via SSH to your Pi.
 
@@ -46,7 +43,7 @@ In this guide we will focus on the setup on a Raspberry Pi.
    ```
 
    ::: details
-   This is needed to persist this data when updating the container
+   This is needed to persist emulator data.
    :::
 
 7. Create the container
