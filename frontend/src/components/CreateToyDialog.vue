@@ -193,6 +193,12 @@
             </v-list-item>
           </template>
         </v-autocomplete>
+
+        <v-checkbox-btn
+          v-model="allowDuplicates"
+          :label="t('create_toy_dialog.allow_duplicates')"
+        />
+
         <div class="mt-4 mb-4" />
         <v-btn
           block
@@ -235,6 +241,7 @@
   const selectedVehicles = ref<Vehicle[]>([])
   const creating = ref<boolean>(false)
   const snackbar = ref<boolean>(false)
+  const allowDuplicates = ref<boolean>(false)
 
   const numCharactersCreated = ref<number>(0)
   const numVehiclesCreated = ref<number>(0)
@@ -247,6 +254,10 @@
   )
 
   const characterToSelect = computed(() => {
+    if (allowDuplicates.value) {
+      return validCharacters.value
+    }
+
     return validCharacters.value.filter(
       (character: Character) =>
         !toyTags.value.some((toyTag: ToyTag) => toyTag.id === character.id)
@@ -260,6 +271,10 @@
   const someVehiclesSelected = computed(() => selectedVehicles.value.length > 0)
 
   const vehiclesToSelect = computed(() => {
+    if (allowDuplicates.value) {
+      return validVehicles.value
+    }
+
     return validVehicles.value.filter(
       (vehicle: Vehicle) =>
         !toyTags.value.some((toyTag: ToyTag) => toyTag.id === vehicle.id)
@@ -331,6 +346,7 @@
       snackbar.value = false
       selectedCharacters.value = []
       selectedVehicles.value = []
+      allowDuplicates.value = false
     }
   })
 </script>

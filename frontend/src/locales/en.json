@@ -18,7 +18,8 @@
     "create_vehicle": "Select vehicles to create",
     "select_all": "Select all",
     "save": "Create {num} toys",
-    "created": "{characters} characters and {vehicles} vehicles created"
+    "created": "{characters} characters and {vehicles} vehicles created",
+    "allow_duplicates": "Allow duplicate toys"
   },
   "toybox": {
     "create_toy": "Create",
